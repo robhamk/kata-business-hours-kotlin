@@ -18,7 +18,10 @@ data class OpeningHours(val beginHour: LiteralHour, val endHour: LiteralHour) {
     }
 
     fun overlay(now: Long): Boolean {
-        return now >= beginHour.toMinute() - ONE_HOUR_IN_MINUTE && now <= endHour.toMinute()
+        if (beginHour.toMinute() < endHour.toMinute()) {
+            return now >= beginHour.toMinute() - ONE_HOUR_IN_MINUTE && now <= endHour.toMinute()
+        }
+        return now <= beginHour.toMinute() - ONE_HOUR_IN_MINUTE && now <= endHour.toMinute()
     }
 
     companion object {
