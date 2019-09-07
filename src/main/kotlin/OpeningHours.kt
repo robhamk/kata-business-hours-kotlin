@@ -5,14 +5,14 @@
 
 data class OpeningHours(val beginHour: LiteralHour, val endHour: LiteralHour) {
     fun operationStage(now: Long): String {
-        if (now > beginHour.toMinute() && now <= endHour.toMinute() - ONE_HOUR_IN_MINUTE) {
+        if (beginHour.toMinute() - ONE_HOUR_IN_MINUTE <= now && beginHour.toMinute() > now) {
+            return "Open Soon"
+        }
+        if (endHour.toMinute() - ONE_HOUR_IN_MINUTE <= now && endHour.toMinute() > now) {
             return "Close Soon"
         }
-        if (beginHour.toMinute() == now) {
+        if (now == beginHour.toMinute()) {
             return "Open"
-        }
-        if (beginHour.toMinute() - ONE_HOUR_IN_MINUTE == now) {
-            return "Open Soon"
         }
         return "Close"
     }
