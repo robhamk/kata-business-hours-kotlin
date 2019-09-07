@@ -32,7 +32,7 @@ class StoreBusinessHoursTest {
     }
 
     @Test
-    fun testOpen_OneHourBeforeOpen() {
+    fun testOpen_OnOpen() {
         givenOneBusinessHours()
 
         shouldBe("Open", LocalDateTime.of(2019, 9, 2, 10, 0))
@@ -43,6 +43,13 @@ class StoreBusinessHoursTest {
         givenOneBusinessHours()
 
         shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 11, 0))
+    }
+
+    @Test
+    fun testClose_OnClose() {
+        givenOneBusinessHours()
+
+        shouldBe("Close", LocalDateTime.of(2019, 9, 2, 12, 0))
     }
 
     private fun givenOneBusinessHours() {
