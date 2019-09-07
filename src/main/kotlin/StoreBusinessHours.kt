@@ -13,27 +13,6 @@ class StoreBusinessHours {
     }
 
     fun query(localDateTime: LocalDateTime): String {
-        val now = toMinute(localDateTime)
-        var overlayBusinessHours = serviceHours.filter { it.overlay(now) }
-        if (overlayBusinessHours.isNotEmpty()) {
-            if (overlayBusinessHours.size >= 2) {
-                if (overlayBusinessHours[0].operationStage(now) == "Close Soon" ||
-                    overlayBusinessHours[1].operationStage(now) == "Close Soon") {
-                    return "Close Soon"
-                }
-                return "Open Soon"
-            }
-            return overlayBusinessHours[0].operationStage(now)
-        }
-        return "Close"
-    }
-
-    private fun toMinute(localDateTime: LocalDateTime): Long {
-        return (localDateTime.dayOfWeek.value * ONE_DAY_IN_MINUTE + localDateTime.hour * ONE_HOUR_IN_MINUTE + localDateTime.minute).toLong()
-    }
-
-    companion object {
-        private const val ONE_HOUR_IN_MINUTE = 60L
-        private const val ONE_DAY_IN_MINUTE = 24 * ONE_HOUR_IN_MINUTE
+        return serviceHours.map { it.operationStage(localDateTime) }.reduce { first, second -> reduceOpening(first, second) }
     }
 }
