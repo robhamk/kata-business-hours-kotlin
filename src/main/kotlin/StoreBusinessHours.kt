@@ -13,7 +13,15 @@ class StoreBusinessHours {
     }
 
     fun query(localDateTime: LocalDateTime): String {
+        val now = toMinute(localDateTime)
+        if (openingHours[0].beginHour.toMinute() == now) {
+            return "Open Soon"
+        }
         return "Close"
+    }
+
+    private fun toMinute(localDateTime: LocalDateTime): Long {
+        return (localDateTime.dayOfWeek.value * 24 * 60 + localDateTime.hour * 60 + localDateTime.minute).toLong()
     }
 
 }
