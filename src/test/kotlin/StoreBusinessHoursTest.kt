@@ -25,10 +25,17 @@ class StoreBusinessHoursTest {
     }
 
     @Test
-    fun testOpen_OneHourBeforeOpen() {
+    fun testOpenSoon_OneHourBeforeOpen() {
         givenOneBusinessHours()
 
         shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 9, 0))
+    }
+
+    @Test
+    fun testOpen_OneHourBeforeOpen() {
+        givenOneBusinessHours()
+
+        shouldBe("Open", LocalDateTime.of(2019, 9, 2, 10, 0))
     }
 
     private fun givenOneBusinessHours() {
