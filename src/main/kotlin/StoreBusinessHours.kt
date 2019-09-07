@@ -16,6 +16,9 @@ class StoreBusinessHours {
         val now = toMinute(localDateTime)
         var overlayBusinessHours = serviceHours.filter { it.overlay(now) }
         if (overlayBusinessHours.isNotEmpty()) {
+            if (overlayBusinessHours.size >= 2) {
+                return "Close Soon"
+            }
             return overlayBusinessHours[0].operationStage(now)
         }
         return "Close"
