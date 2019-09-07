@@ -59,6 +59,13 @@ class StoreBusinessHoursTest {
         shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 13, 0))
     }
 
+    @Test
+    fun testCloseSoon_OneHoursBeforeSecondClose_TwoBusinessHours() {
+        givenTwoBusinessHours()
+
+        shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 15, 0))
+    }
+
     private fun givenOneBusinessHours() {
         storeBusinessHours.setOpeningHours(
             listOf(
