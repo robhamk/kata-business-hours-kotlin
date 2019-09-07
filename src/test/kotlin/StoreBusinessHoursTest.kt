@@ -38,6 +38,13 @@ class StoreBusinessHoursTest {
         shouldBe("Open", LocalDateTime.of(2019, 9, 2, 10, 0))
     }
 
+    @Test
+    fun testCloseSoon_OneHourBeforeClose() {
+        givenOneBusinessHours()
+
+        shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 11, 0))
+    }
+
     private fun givenOneBusinessHours() {
         val beginHour = LiteralHour(DayOfWeek.MONDAY, 10, 0)
         val endHour = LiteralHour(DayOfWeek.MONDAY, 12, 0)

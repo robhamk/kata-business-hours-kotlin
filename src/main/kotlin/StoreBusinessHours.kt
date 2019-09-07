@@ -14,6 +14,9 @@ class StoreBusinessHours {
 
     fun query(localDateTime: LocalDateTime): String {
         val now = toMinute(localDateTime)
+        if (now > openingHours[0].beginHour.toMinute() && now <= openingHours[0].endHour.toMinute() - ONE_HOUR_IN_MINUTE) {
+            return "Close Soon"
+        }
         if (openingHours[0].beginHour.toMinute() == now) {
             return "Open"
         }
