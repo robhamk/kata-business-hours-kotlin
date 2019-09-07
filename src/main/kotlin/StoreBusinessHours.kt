@@ -21,11 +21,11 @@ class StoreBusinessHours {
     }
 
     private fun toMinute(localDateTime: LocalDateTime): Long {
-        return (localDateTime.dayOfWeek.value * ONE_DAY_IN_MINUTE + localDateTime.hour * ONEHOUR_IN_MINUTE + localDateTime.minute).toLong()
+        return (localDateTime.dayOfWeek.value * ONE_DAY_IN_MINUTE + localDateTime.hour * ONE_HOUR_IN_MINUTE + localDateTime.minute).toLong()
     }
 
     companion object {
         private const val ONE_HOUR_IN_MINUTE = 60L
-        private const val ONE_DAY_IN_MINUTE = 60 * ONE_HOUR_IN_MINUTE
+        private const val ONE_DAY_IN_MINUTE = 24 * ONE_HOUR_IN_MINUTE
     }
 }

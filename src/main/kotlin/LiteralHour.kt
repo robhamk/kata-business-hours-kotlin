@@ -7,6 +7,11 @@ import java.time.DayOfWeek
 
 data class LiteralHour(val dayOfWeek: DayOfWeek, val hour: Int, val minute: Int) {
     fun toMinute(): Long {
-        return (dayOfWeek.value * 24 * 60 + hour * 60 + minute).toLong()
+        return (dayOfWeek.value * ONE_DAY_IN_MINUTE + hour * ONE_HOUR_IN_MINUTE + minute).toLong()
+    }
+
+    companion object {
+        private const val ONE_HOUR_IN_MINUTE = 60L
+        private const val ONE_DAY_IN_MINUTE = 24 * ONE_HOUR_IN_MINUTE
     }
 }
