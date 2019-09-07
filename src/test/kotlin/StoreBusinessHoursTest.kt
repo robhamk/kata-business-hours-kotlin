@@ -52,11 +52,28 @@ class StoreBusinessHoursTest {
         shouldBe("Close", LocalDateTime.of(2019, 9, 2, 12, 0))
     }
 
+    @Test
+    fun testOpenSoon_OneHoursBeforeSecondOpen_TwoBusinessHours() {
+        givenTwoBusinessHours()
+
+        shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 13, 0))
+    }
+
     private fun givenOneBusinessHours() {
         val beginHour = LiteralHour(DayOfWeek.MONDAY, 10, 0)
         val endHour = LiteralHour(DayOfWeek.MONDAY, 12, 0)
         val openingHours = OpeningHours(beginHour, endHour)
         storeBusinessHours.setOpeningHours(listOf(openingHours))
+    }
+
+    private fun givenTwoBusinessHours() {
+        val beginHour = LiteralHour(DayOfWeek.MONDAY, 10, 0)
+        val endHour = LiteralHour(DayOfWeek.MONDAY, 12, 0)
+        val openingHours = OpeningHours(beginHour, endHour)
+        val beginHour2 = LiteralHour(DayOfWeek.MONDAY, 14, 0)
+        val endHour2 = LiteralHour(DayOfWeek.MONDAY, 16, 0)
+        val openingHours2 = OpeningHours(beginHour2, endHour2)
+        storeBusinessHours.setOpeningHours(listOf(openingHours, openingHours2))
     }
 
     private fun shouldBe(expectedResult: String, localDateTime: LocalDateTime) {

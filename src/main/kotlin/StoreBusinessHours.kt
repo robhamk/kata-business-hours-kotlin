@@ -14,8 +14,11 @@ class StoreBusinessHours {
 
     fun query(localDateTime: LocalDateTime): String {
         val now = toMinute(localDateTime)
-        val openingHours = serviceHours[0]
-        return openingHours.operationStage(now)
+        var overlayBusinessHours = serviceHours.filter { it.overlay(now) }
+        if (overlayBusinessHours.isNotEmpty()) {
+            return overlayBusinessHours[0].operationStage(now)
+        }
+        return "Close"
     }
 
     private fun toMinute(localDateTime: LocalDateTime): Long {
