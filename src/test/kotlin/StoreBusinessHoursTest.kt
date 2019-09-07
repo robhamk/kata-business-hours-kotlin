@@ -60,20 +60,23 @@ class StoreBusinessHoursTest {
     }
 
     private fun givenOneBusinessHours() {
-        val beginHour = LiteralHour(DayOfWeek.MONDAY, 10, 0)
-        val endHour = LiteralHour(DayOfWeek.MONDAY, 12, 0)
-        val openingHours = OpeningHours(beginHour, endHour)
-        storeBusinessHours.setOpeningHours(listOf(openingHours))
+        storeBusinessHours.setOpeningHours(
+            listOf(
+                OpeningHours(
+                    LiteralHour(DayOfWeek.MONDAY, 10, 0),
+                    LiteralHour(DayOfWeek.MONDAY, 12, 0)
+                )
+            )
+        )
     }
 
     private fun givenTwoBusinessHours() {
-        val beginHour = LiteralHour(DayOfWeek.MONDAY, 10, 0)
-        val endHour = LiteralHour(DayOfWeek.MONDAY, 12, 0)
-        val openingHours = OpeningHours(beginHour, endHour)
-        val beginHour2 = LiteralHour(DayOfWeek.MONDAY, 14, 0)
-        val endHour2 = LiteralHour(DayOfWeek.MONDAY, 16, 0)
-        val openingHours2 = OpeningHours(beginHour2, endHour2)
-        storeBusinessHours.setOpeningHours(listOf(openingHours, openingHours2))
+        storeBusinessHours.setOpeningHours(
+            listOf(
+                OpeningHours(LiteralHour(DayOfWeek.MONDAY, 10, 0), LiteralHour(DayOfWeek.MONDAY, 12, 0)),
+                OpeningHours(LiteralHour(DayOfWeek.MONDAY, 14, 0), LiteralHour(DayOfWeek.MONDAY, 16, 0))
+            )
+        )
     }
 
     private fun shouldBe(expectedResult: String, localDateTime: LocalDateTime) {
