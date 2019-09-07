@@ -6,21 +6,26 @@ import java.time.LocalDateTime
  */
 
 class StoreBusinessHours {
-    private lateinit var openingHours: List<OpeningHours>
+    private lateinit var serviceHours: List<OpeningHours>
 
     fun setOpeningHours(openingHours: List<OpeningHours>) {
-        this.openingHours = openingHours;
+        this.serviceHours = openingHours;
     }
 
     fun query(localDateTime: LocalDateTime): String {
         val now = toMinute(localDateTime)
-        if (now > openingHours[0].beginHour.toMinute() && now <= openingHours[0].endHour.toMinute() - ONE_HOUR_IN_MINUTE) {
+        val openingHours = serviceHours[0]
+        return operationStage(now, openingHours)
+    }
+
+    private fun operationStage(now: Long, openingHours: OpeningHours): String {
+        if (now > openingHours.beginHour.toMinute() && now <= openingHours.endHour.toMinute() - ONE_HOUR_IN_MINUTE) {
             return "Close Soon"
         }
-        if (openingHours[0].beginHour.toMinute() == now) {
+        if (openingHours.beginHour.toMinute() == now) {
             return "Open"
         }
-        if (openingHours[0].beginHour.toMinute() - ONE_HOUR_IN_MINUTE == now) {
+        if (openingHours.beginHour.toMinute() - ONE_HOUR_IN_MINUTE == now) {
             return "Open Soon"
         }
         return "Close"
