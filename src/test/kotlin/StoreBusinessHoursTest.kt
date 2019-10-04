@@ -1,5 +1,5 @@
+
 import junit.framework.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalDateTime
@@ -10,12 +10,7 @@ import java.time.LocalDateTime
  */
 
 class StoreBusinessHoursTest {
-    private lateinit var storeBusinessHours: StoreBusinessHours
-
-    @Before
-    fun setup() {
-        storeBusinessHours = StoreBusinessHours()
-    }
+    private lateinit var openingHoursList: List<OpeningHours>
 
     @Test
     fun testClose_MoreThanOneHoursBeforeOpen() {
@@ -165,11 +160,11 @@ class StoreBusinessHoursTest {
     }
 
     private fun givenOpeningHours(vararg openingHours: OpeningHours) {
-        storeBusinessHours.setOpeningHours(openingHours.toList())
+        openingHoursList = openingHours.toList()
     }
 
     private fun shouldBe(expectedResult: String, localDateTime: LocalDateTime) {
-        assertEquals(expectedResult, storeBusinessHours.query(localDateTime))
+        assertEquals(expectedResult, StoreBusinessHours(openingHoursList).query(localDateTime))
     }
 
     private fun openingHours(beginHour: Int, beginMinute: Int, endHour: Int, endMinute: Int): OpeningHours {
