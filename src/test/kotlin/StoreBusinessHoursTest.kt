@@ -1,5 +1,5 @@
+
 import junit.framework.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalDateTime
@@ -10,153 +10,170 @@ import java.time.LocalDateTime
  */
 
 class StoreBusinessHoursTest {
-    private lateinit var storeBusinessHours: StoreBusinessHours
-
-    @Before
-    fun setup() {
-        storeBusinessHours = StoreBusinessHours()
-    }
+    private lateinit var openingHoursList: List<OpeningHours>
 
     @Test
     fun testClose_MoreThanOneHoursBeforeOpen() {
-        givenOneBusinessHours()
+        givenOpeningHours(
+            openingHours(
+                10, 0,
+                12, 0
+            )
+        )
 
-        shouldBe("Close", LocalDateTime.of(2019, 9, 2, 8, 59))
+        shouldBe("Close", currentHourAndMinute(8, 59))
     }
 
     @Test
     fun testOpenSoon_OneHourBeforeOpen() {
-        givenOneBusinessHours()
+        givenOpeningHours(
+            openingHours(
+                10, 0,
+                12, 0
+            )
+        )
 
-        shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 9, 0))
+        shouldBe("Open Soon", currentHourAndMinute(9, 0))
+        shouldBe("Open Soon", currentHourAndMinute(9, 59))
     }
 
     @Test
     fun testOpen_OnOpen() {
-        givenOneBusinessHours()
+        givenOpeningHours(
+            openingHours(
+                10, 0,
+                12, 0
+            )
+        )
 
-        shouldBe("Open", LocalDateTime.of(2019, 9, 2, 10, 0))
+        shouldBe("Open", currentHourAndMinute(10, 0))
+        shouldBe("Open", currentHourAndMinute(10, 59))
     }
 
     @Test
     fun testCloseSoon_OneHourBeforeClose() {
-        givenOneBusinessHours()
+        givenOpeningHours(
+            openingHours(
+                10, 0,
+                12, 0
+            )
+        )
 
-        shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 11, 0))
+        shouldBe("Close Soon", currentHourAndMinute(11, 0))
+        shouldBe("Close Soon", currentHourAndMinute(11, 59))
     }
 
     @Test
     fun testClose_OnClose() {
-        givenOneBusinessHours()
+        givenOpeningHours(
+            openingHours(
+                10, 0,
+                12, 0
+            )
+        )
 
-        shouldBe("Close", LocalDateTime.of(2019, 9, 2, 12, 0))
+        shouldBe("Close", currentHourAndMinute(12, 0))
     }
 
     @Test
     fun testOpenSoon_OneHoursBeforeSecondOpen_TwoBusinessHours() {
-        givenTwoBusinessHours()
+        givenOpeningHours(
+            openingHours(10, 0, 12, 0),
+            openingHours(14, 0, 16, 0)
+        )
 
-        shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 13, 0))
+        shouldBe("Open Soon", currentHourAndMinute(13, 0))
+        shouldBe("Open Soon", currentHourAndMinute(13, 59))
     }
 
     @Test
     fun testCloseSoon_OneHoursBeforeSecondClose_TwoBusinessHours() {
-        givenTwoBusinessHours()
+        givenOpeningHours(
+            openingHours(10, 0, 12, 0),
+            openingHours(14, 0, 16, 0)
+        )
 
-        shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 15, 0))
+        shouldBe("Close Soon", currentHourAndMinute(15, 0))
+        shouldBe("Close Soon", currentHourAndMinute(15, 59))
     }
 
     @Test
     fun testClose_OneHourAfterSecondClose_TwoBusinessHours() {
-        givenTwoBusinessHours()
+        givenOpeningHours(
+            openingHours(10, 0, 12, 0),
+            openingHours(14, 0, 16, 0)
+        )
 
-        shouldBe("Close", LocalDateTime.of(2019, 9, 2, 17, 0))
+        shouldBe("Close", currentHourAndMinute(16, 0))
     }
 
     @Test
     fun testCloseSoon_HalfHourBeforeFirstCloseAndOneHourBeforeSecondOpen_TwoCloseBusinessHours() {
-        givenTwoCloseBusinessHours()
+        givenOpeningHours(
+            openingHours(10, 0, 12, 0),
+            openingHours(12, 30, 14, 0)
+        )
 
-        shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 11, 30))
+        shouldBe("Close Soon", currentHourAndMinute(11, 30))
+        shouldBe("Close Soon", currentHourAndMinute(11, 59))
     }
 
     @Test
     fun testOpenSoon_OnFirstCloseAndHalfHourBeforeSecondOpen_TwoCloseBusinessHours() {
-        givenTwoCloseBusinessHours()
+        givenOpeningHours(
+            openingHours(10, 0, 12, 0),
+            openingHours(12, 30, 14, 0)
+        )
 
-        shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 12, 0))
+        shouldBe("Open Soon", currentHourAndMinute(12, 0))
+        shouldBe("Open Soon", currentHourAndMinute(12, 29))
     }
 
     @Test
     fun testCloseSoon_OneHourBeforeClose_CloseHourIsSmallerThanOpenHour() {
-        givenCloseHourIsSmallerThanOpenHour()
+        givenOpeningHours(
+            openingHours(8, 0, 7, 0)
+        )
 
-        shouldBe("Close Soon", LocalDateTime.of(2019, 9, 2, 6, 0))
+        shouldBe("Close Soon", currentHourAndMinute(6, 0))
+        shouldBe("Close Soon", currentHourAndMinute(6, 59))
+        shouldBe("Open", currentHourAndMinute(8, 0))
     }
 
     @Test
     fun testOpenSoon_OneHourBeforeOpen_CloseHourIsSmallerThanOpenHour() {
-        givenCloseHourIsSmallerThanOpenHour()
+        givenOpeningHours(
+            openingHours(8, 0, 7, 0)
+        )
 
-        shouldBe("Open Soon", LocalDateTime.of(2019, 9, 2, 7, 0))
+        shouldBe("Open Soon", currentHourAndMinute(7, 0))
+        shouldBe("Open Soon", currentHourAndMinute(7, 59))
     }
 
     @Test
     fun testOpen_OneHourBeforeOpen_CloseHourIsSmallerThanOpenHour() {
-        givenCloseHourIsSmallerThanOpenHour()
+        givenOpeningHours(
+            openingHours(8, 0, 7, 0)
+        )
 
-        shouldBe("Open", LocalDateTime.of(2019, 9, 2, 8, 0))
+        shouldBe("Open", currentHourAndMinute(8, 0))
     }
 
-    private fun givenOneBusinessHours() {
-        storeBusinessHours.setOpeningHours(
-            listOf(
-                OpeningHours(
-                    LiteralHour(DayOfWeek.MONDAY, 10, 0),
-                    LiteralHour(DayOfWeek.MONDAY, 12, 0)
-                )
-            )
-        )
-    }
-
-    private fun givenTwoBusinessHours() {
-        storeBusinessHours.setOpeningHours(
-            listOf(
-                OpeningHours(
-                    LiteralHour(DayOfWeek.MONDAY, 10, 0),
-                    LiteralHour(DayOfWeek.MONDAY, 12, 0)),
-                OpeningHours(
-                    LiteralHour(DayOfWeek.MONDAY, 14, 0),
-                    LiteralHour(DayOfWeek.MONDAY, 16, 0))
-            )
-        )
-    }
-
-    private fun givenTwoCloseBusinessHours() {
-        storeBusinessHours.setOpeningHours(
-            listOf(
-                OpeningHours(
-                    LiteralHour(DayOfWeek.MONDAY, 10, 0),
-                    LiteralHour(DayOfWeek.MONDAY, 12, 0)),
-                OpeningHours(
-                    LiteralHour(DayOfWeek.MONDAY, 12, 30),
-                    LiteralHour(DayOfWeek.MONDAY, 14, 0))
-            )
-        )
-    }
-
-    private fun givenCloseHourIsSmallerThanOpenHour() {
-        storeBusinessHours.setOpeningHours(
-            listOf(
-                OpeningHours(
-                    LiteralHour(DayOfWeek.MONDAY, 8, 0),
-                    LiteralHour(DayOfWeek.MONDAY, 7, 0)
-                )
-            )
-        )
+    private fun givenOpeningHours(vararg openingHours: OpeningHours) {
+        openingHoursList = openingHours.toList()
     }
 
     private fun shouldBe(expectedResult: String, localDateTime: LocalDateTime) {
-        assertEquals(expectedResult, storeBusinessHours.query(localDateTime))
+        assertEquals(expectedResult, StoreBusinessHours(openingHoursList).query(localDateTime))
     }
+
+    private fun openingHours(beginHour: Int, beginMinute: Int, endHour: Int, endMinute: Int): OpeningHours {
+        return OpeningHours(
+            LiteralHour(DayOfWeek.MONDAY, beginHour, beginMinute),
+            LiteralHour(DayOfWeek.MONDAY, endHour, endMinute)
+        )
+    }
+
+    private fun currentHourAndMinute(hour: Int, minute: Int) = LocalDateTime.of(2019, 9, 2, hour, minute)
+
 }
